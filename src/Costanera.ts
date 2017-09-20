@@ -6,6 +6,7 @@ class Costanera
 	ancho: number;
 	alto:number;
 	personaje: Personaje;
+	obstaculo: Phaser.Sprite;
 	cursores:Phaser.CursorKeys;
 	saltarBtn:Phaser.Key;
 	btnVolar:Phaser.Key;
@@ -41,6 +42,14 @@ class Costanera
 
 	getPersonaje ():Personaje{
 		return this.personaje;
+	}
+	
+	setObstaculo(value: Phaser.Sprite ){
+		this.obstaculo = value;
+	}
+
+	getObstaculo (){
+		return this.obstaculo;
 	}
 
 	setCursores(cursores: Phaser.CursorKeys ){
@@ -91,6 +100,8 @@ class Costanera
 			getAlto: this.getAlto,
 			setPersonaje: this.setPersonaje,
 			getPersonaje: this.getPersonaje,
+			setObstaculo: this.setObstaculo,
+			getObstaculo: this.getObstaculo,
 			setCursores: this.setCursores,
 			getCursores: this.getCursores,
 			setSaltarBtn: this.setSaltarBtn,

@@ -29,6 +29,8 @@ var Costanera = /** @class */ (function () {
             getAlto: this.getAlto,
             setPersonaje: this.setPersonaje,
             getPersonaje: this.getPersonaje,
+            setObstaculo: this.setObstaculo,
+            getObstaculo: this.getObstaculo,
             setCursores: this.setCursores,
             getCursores: this.getCursores,
             setSaltarBtn: this.setSaltarBtn,
@@ -61,6 +63,12 @@ var Costanera = /** @class */ (function () {
     };
     Costanera.prototype.getPersonaje = function () {
         return this.personaje;
+    };
+    Costanera.prototype.setObstaculo = function (value) {
+        this.obstaculo = value;
+    };
+    Costanera.prototype.getObstaculo = function () {
+        return this.obstaculo;
     };
     Costanera.prototype.setCursores = function (cursores) {
         this.cursores = cursores;
