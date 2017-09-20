@@ -5,7 +5,7 @@ class Costanera
 	game:Phaser.Game;
 	ancho: number;
 	alto:number;
-	personaje: Phaser.Sprite;
+	personaje: Personaje;
 	cursores:Phaser.CursorKeys;
 	saltarBtn:Phaser.Key;
 	btnVolar:Phaser.Key;
@@ -35,11 +35,11 @@ class Costanera
 		return this.alto;
 	}
 
-	setPersonaje(personaje: Phaser.Sprite ){
+	setPersonaje(personaje: Personaje ){
 		this.personaje = personaje;
 	}
 
-	getPersonaje (){
+	getPersonaje ():Personaje{
 		return this.personaje;
 	}
 
