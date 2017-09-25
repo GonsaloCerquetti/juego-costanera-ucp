@@ -108,6 +108,7 @@ class Costanera
 			getSaltarBtn: this.getSaltarBtn,
 			setBtnVolar: this.setBtnVolar,
 			getBtnVolar: this.getBtnVolar,
+			listener: this.listener,
 		} ));
 	}
 	
@@ -116,6 +117,7 @@ class Costanera
 		// add our logo image to the assets class under the
 		// key 'logo'. We're also setting the background colour
 		// so it's the same as the background colour in the image
+		this.getGame().load.image('obstaculo', 'assets/obstaculo.png');
 		this.getGame().load.image('player', 'assets/imagen.png');
 		this.getGame().load.image( 'costanera', "assets/costanera.jpg" );
 		
@@ -139,18 +141,41 @@ class Costanera
 		logo.height = this.getGame().height;
 		logo.width = this.getGame().width;
 
+		this.getGame().physics.startSystem(Phaser.Physics.ARCADE);
+		this.getGame().time.desiredFps = 30;
+
+		this.getGame().physics.arcade.gravity.y = 250;
+
 		var personaje = this.getGame().add.sprite(100, 200, 'player');
-		personaje.height = 150;
-		personaje.width = 75;
+		personaje.height = 200;
+		personaje.width = 100;
 		this.setPersonaje(personaje);
 		
-		this.getGame().physics.arcade.enable(this.getPersonaje());
+		this.getGame().physics.enable(this.getPersonaje(),Phaser.Physics.ARCADE);
 		
+		//Personaje
 		this.getPersonaje().body.collideWorldBounds = true;
 		this.getPersonaje().body.gravity.y = 500;
 		
+		//obstaculo
+		var obstaculo = this.getGame().add.sprite(300, 50, 'obstaculo');
+		this.setObstaculo(obstaculo);
+		obstaculo.name = 'obstaculo';
+	
+		this.getGame().physics.enable(obstaculo, Phaser.Physics.ARCADE);
+		logo.inputEnabled = true;
+		logo.events.onInputDown.add(this.listener, this);
+		//this.getObstaculo().body.velocity.y = 10;
+	
+		//  This adjusts the collision body size.
+		//  220x10 is the new width/height.
+		//  See the offset bounding box for another example.
+		this.getObstaculo().body.setSize(10, 10, 0, 0);
+		
 		this.setCursores(this.getGame().input.keyboard.createCursorKeys());
 		this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
+
+		
 		this.setBtnVolar(this.getGame().input.keyboard.addKey(Phaser.Keyboard.V));
 
 	}
@@ -180,9 +205,14 @@ class Costanera
 					this.getPersonaje().body.velocity.y = -400;
 				}
 		}
+		listener () {
+			this.getPersonaje().revive()
+			
+		}
 }
 
 // when the page has finished loading, create our game
 window.onload = () => {
 	var game = new Costanera(window.innerWidth,window.innerHeight);
 }
+
