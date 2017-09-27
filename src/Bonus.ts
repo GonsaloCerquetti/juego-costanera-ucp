@@ -1,5 +1,5 @@
 // /// <reference path="../tsDefinitions/phaser.d.ts" />
 
-export class Personaje extends Phaser.Sprite{
+export abstract class Bonus extends Phaser.Sprite{
     
     }
