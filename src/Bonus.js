@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Bonus = (function (_super) {
+var Bonus = /** @class */ (function (_super) {
     __extends(Bonus, _super);
     function Bonus() {
         return _super !== null && _super.apply(this, arguments) || this;

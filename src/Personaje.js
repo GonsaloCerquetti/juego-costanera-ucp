@@ -11,7 +11,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-var Personaje = (function (_super) {
+var Personaje = /** @class */ (function (_super) {
     __extends(Personaje, _super);
     function Personaje() {
         return _super !== null && _super.apply(this, arguments) || this;

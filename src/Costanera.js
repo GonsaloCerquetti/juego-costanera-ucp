@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var Costanera = (function () {
+var Costanera = /** @class */ (function () {
     function Costanera(ancho, alto) {
         // create our phaser game
         // 800 - width
@@ -8,7 +8,7 @@ var Costanera = (function () {
         // Phaser.AUTO - determine the renderer automatically (canvas, webgl)
         // 'content' - the name of the container to add our game to
         // { preload:this.preload, create:this.create} - functions to call for our states
-        this.setGame(new Phaser.Game(ancho, alto, Phaser.CANVAS, 'content', {
+        this.setGame(new Phaser.Game(ancho, alto, Phaser.CENTER, 'content', {
             preload: this.preload,
             create: this.create,
             update: this.update,
@@ -32,6 +32,8 @@ var Costanera = (function () {
             setFacing: this.setFacing,
             getEmitter: this.getEmitter,
             setEmitter: this.setEmitter,
+            setBtnVolar: this.setBtnVolar,
+            getBtnVolar: this.getBtnVolar,
             collisionHandler: this.collisionHandler,
             listener: this.listener
         }));
@@ -97,13 +99,19 @@ var Costanera = (function () {
     Costanera.prototype.getEmitter = function () {
         return this.emitter;
     };
+    Costanera.prototype.setBtnVolar = function (volar) {
+        this.btnVolar = volar;
+    };
+    Costanera.prototype.getBtnVolar = function () {
+        return this.btnVolar;
+    };
     Costanera.prototype.preload = function () {
         // add our logo image to the assets class under the
         // key 'logo'. We're also setting the background colour
         // so it's the same as the background colour in the image
         this.getGame().load.image('pokebola', 'assets/pokebola.png');
         this.getGame().load.image('bonus', 'assets/fruta.png');
-        this.getGame().load.spritesheet('player', 'sprites/dude.png', 32, 48);
+        this.getGame().load.image('player', 'assets/imagen.png');
         this.getGame().load.image('costanera', "assets/costanera.jpg");
         //Agregamos un comentario para probar subir cambios a GIT desde el editor
         //hacemos un cambio en el archivo
@@ -131,13 +139,8 @@ var Costanera = (function () {
         //Personaje
         this.getPersonaje().body.collideWorldBounds = true;
         this.getPersonaje().body.gravity.y = 500;
-        this.getPersonaje().body.setSize(20, 32, 5, 16);
-        this.getPersonaje().animations.add('left', [0, 1, 2, 3], 10, true);
-        this.getPersonaje().animations.add('turn', [4], 20, true);
-        this.getPersonaje().animations.add('right', [5, 6, 7, 8], 10, true);
-        this.setFacing('left');
-        //Pokebola
-        this.setPokebola(this.getGame().add.sprite(300, 50, 'pokebola'));
+        //pokebola
+        this.setPokebola = this.getGame().add.sprite(300, 50, 'pokebola');
         this.getPokebola().name = 'pokebola';
         this.getGame().physics.enable(this.getPokebola(), Phaser.Physics.ARCADE);
         //  This adjusts the collision body size.
@@ -156,7 +159,7 @@ var Costanera = (function () {
         //Click event
         logo.inputEnabled = true;
         logo.events.onInputDown.add(this.listener, this);
-        //this.getPokebola().body.velocity.y = 10;
+        //this.getBasurero().body.velocity.y = 10;
         this.setCursores(this.getGame().input.keyboard.createCursorKeys());
         this.setSaltarBtn(this.getGame().input.keyboard.addKey(Phaser.Keyboard.SPACEBAR));
         //emitter Pokebola
@@ -216,6 +219,9 @@ var Costanera = (function () {
         }
         if (this.getSaltarBtn().isDown && (this.getPersonaje().body.onFloor())) {
             this.getPersonaje().body.velocity.y = -600;
+        }
+        if (this.getBtnVolar().isDown && (this.getPersonaje().body || this.getPersonaje().body.touching.down)) {
+            this.getPersonaje().body.velocity.y = -400;
         }
     };
     Costanera.prototype.collisionHandler = function (objetos, personaje) {
