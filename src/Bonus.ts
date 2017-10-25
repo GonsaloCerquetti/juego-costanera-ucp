@@ -1,5 +1,7 @@
-// /// <reference path="../tsDefinitions/phaser.d.ts" />
 
-export abstract class Bonus extends Phaser.Sprite{
+// /// <reference path="../tsDefinitions/phaser.d.ts" />
+module JuegoCostanera {
+    export abstract class Bonus extends Phaser.Sprite{
     
     }
+}
