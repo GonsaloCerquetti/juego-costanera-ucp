@@ -35,17 +35,10 @@ var JuegoCostanera;
             _this.body.setSize(844, 1254);
             _this.setOrientacion('right');
             _this.setPuntos(0);
-            _this.setPuntosB(0);
             _this.setVidas(3);
             game.add.existing(_this);
             return _this;
         }
-        Personaje.prototype.getPuntosB = function () {
-            return this.puntosBonus;
-        };
-        Personaje.prototype.setPuntosB = function (value) {
-            this.puntosBonus = value;
-        };
         Personaje.prototype.getPuntos = function () {
             return this.puntos;
         };
@@ -373,19 +366,12 @@ var JuegoCostanera;
             //  Reduce the lives
             this.getPersonaje().setVidas(this.getPersonaje().getVidas() - 1);
             this.getTextoVidas().text = "Vidas: " + this.getPersonaje().getVidas().toString();
-            this.getPersonaje().setPuntosB(0);
         };
         Costanera.prototype.collisionFruta = function (fruta, personaje) {
             personaje.kill();
             //  Increase the score
             this.getPersonaje().setPuntos(this.getPersonaje().getPuntos() + 20);
-            this.getPersonaje().setPuntosB(this.getPersonaje().getPuntosB() + 20);
             this.getTextoPuntos().text = "Puntos: " + this.getPersonaje().getPuntos().toString();
-            if (this.getPersonaje().getPuntosB() == 200) {
-                this.getPersonaje().setVidas(this.getPersonaje().getVidas() + 1);
-                this.getTextoVidas().text = "Vidas: " + this.getPersonaje().getVidas().toString();
-                this.getPersonaje().setPuntosB(0);
-            }
         };
         Costanera.prototype.listener = function () {
             this.getPersonaje().revive();

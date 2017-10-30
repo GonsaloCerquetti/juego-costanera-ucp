@@ -286,7 +286,7 @@ module JuegoCostanera {
 			//  Reduce the lives
 			this.getPersonaje().setVidas(this.getPersonaje().getVidas() - 1);
 			this.getTextoVidas().text = "Vidas: " + this.getPersonaje().getVidas().toString();	
-			this.getPersonaje().setPuntosB(0);
+		
 		}
 
 		collisionFruta (fruta, personaje) 
@@ -294,14 +294,9 @@ module JuegoCostanera {
 			personaje.kill();
 			//  Increase the score
 			this.getPersonaje().setPuntos(this.getPersonaje().getPuntos() + 20);
-			this.getPersonaje().setPuntosB(this.getPersonaje().getPuntosB() + 20);
 			this.getTextoPuntos().text = "Puntos: " + this.getPersonaje().getPuntos().toString();
 			
-			if(this.getPersonaje().getPuntosB() == 200 ){
-				this.getPersonaje().setVidas(this.getPersonaje().getVidas() + 1);
-				this.getTextoVidas().text = "Vidas: " + this.getPersonaje().getVidas().toString();
-				this.getPersonaje().setPuntosB(0);
-			}	
+		
 		}
 
 		listener () 

@@ -5,8 +5,7 @@ module JuegoCostanera{
         puntos: number;
         vidas: number;
         orientacion: string;
-        puntosBonus: number;
-    
+       
         constructor(game: Phaser.Game, x: number, y: number,frame: string) {
             super(game, x, y, frame);
             
@@ -20,19 +19,11 @@ module JuegoCostanera{
             this.setOrientacion('right');        
 
             this.setPuntos(0);
-            this.setPuntosB(0);
             this.setVidas (3);
             game.add.existing(this);
 
         }
 
-        getPuntosB(){
-            return this.puntosBonus;
-        }
-    
-        setPuntosB(value:number){
-            this.puntosBonus = value;
-        }
 
         getPuntos(){
             return this.puntos;
