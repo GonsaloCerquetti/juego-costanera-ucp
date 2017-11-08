@@ -18,6 +18,9 @@ module JuegoCostanera {
 		textoPuntos: Phaser.Text;
 		dobleSalto:number;
 		bajarBtn:Phaser.Key;
+		jump:boolean;
+		left:boolean;
+		right:boolean;
 
 //--	------------------setters y getters --------------------------------------
 		setGame(game: Phaser.Game ){
@@ -116,6 +119,30 @@ module JuegoCostanera {
 		setTextoVidas(value:Phaser.Text){
 			this.textoVidas = value;
 		}
+		
+		setJump(value: boolean ){
+			this.jump = value;
+		}
+
+		getJump(){
+			return this.jump;
+		}
+
+		setLeft(value: boolean ){
+			this.left = value;
+		}
+
+		getLeft(){
+			return this.left;
+		}
+
+		setRight(value: boolean ){
+			this.right = value;
+		}
+
+		getRight(){
+			return this.right;
+		}
 
 		constructor(ancho: number,alto:number)
 		{
@@ -149,7 +176,17 @@ module JuegoCostanera {
 				getTextoPuntos: this.getTextoPuntos,
 				setTextoPuntos: this.setTextoPuntos,
 				getTextoVidas: this.getTextoVidas,
-				setTextoVidas: this.setTextoVidas
+				setTextoVidas: this.setTextoVidas,
+				listenerJump: this.listenerJump,
+				listenerLeft: this.listenerLeft,
+				listenerRight: this.listenerRight,
+				setJump: this.setJump,
+				getJump: this.getJump,
+				setLeft: this.setLeft,
+				getLeft: this.getLeft,
+				setRight: this.setRight,
+				getRight: this.getRight,
+				goFull:this.goFull,
 			} ));
 		}
 
@@ -163,12 +200,19 @@ module JuegoCostanera {
 			this.getGame().load.image('player', 'assets/pikachu.png');
 			this.getGame().load.image( 'costanera', "assets/costanera.jpg" );
 			this.getGame().load.image('gameover', "assets/gameover.png" )
+
+			//Botones
+			this.getGame().load.spritesheet('buttonvertical', 'assets/button-vertical.png',64,64);
+			this.getGame().load.spritesheet('buttonhorizontal', 'assets/button-horizontal.png',96,64);
+			this.getGame().load.spritesheet('buttonjump', 'assets/button-round.png',96,96);
 		}
 
 		create()
 		{
 			//Seteamos la imagen del juego en la posicion '0,0'
-		    //y el ancho y alto de la misma según el tamaño de la ventana actual
+			//y el ancho y alto de la misma según el tamaño de la ventana actual
+			if (!this.getGame().device.desktop){ this.getGame().input.onDown.add(this.goFull, this); }
+
 			var logo = this.getGame().add.sprite( this.getGame().world.centerX, this.getGame().world.centerY, 'costanera' );
 			logo.x = 0;
 			logo.y = 0;
@@ -211,6 +255,31 @@ module JuegoCostanera {
 			var vidasString = 'Vidas: ';
  			var vidasText = this.getGame().add.text(this.getGame().world.width - 140, 10, vidasString + this.getPersonaje().getVidas(), { font: '34px Arial', fill: '#fff' });
 			this.setTextoVidas(vidasText); 
+
+			// create our virtual game controller buttons 
+			//Boton de salto
+			var buttonjump = this.getGame().add.button(this.getGame().world.width - 140, this.getGame().world.height - 140, 'buttonjump', null, this, 0, 1, 0, 1);  //game, x, y, key, callback, callbackContext, overFrame, outFrame, downFrame, upFrame
+			buttonjump.fixedToCamera = true;  //our buttons should stay on the same place  
+			buttonjump.events.onInputOver.add(this.listenerJump,this,0,true);
+			buttonjump.events.onInputOut.add(this.listenerJump,this,0,false);
+			buttonjump.events.onInputDown.add(this.listenerJump,this,0,true);
+			buttonjump.events.onInputUp.add(this.listenerJump,this,0,false);
+			
+			//Boton izquierda
+			var buttonleft = this.getGame().add.button(30, this.getGame().world.height	- 140, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+			buttonleft.fixedToCamera = true;
+			buttonleft.events.onInputOver.add(this.listenerLeft,this,0,true);
+			buttonleft.events.onInputOut.add(this.listenerLeft,this,0,false);
+			buttonleft.events.onInputDown.add(this.listenerLeft,this,0,true);
+			buttonleft.events.onInputUp.add(this.listenerLeft,this,0,false);
+		
+			//Boton derecha
+			var buttonright = this.getGame().add.button(190, this.getGame().world.height - 140, 'buttonhorizontal', null, this, 0, 1, 0, 1);
+			buttonright.fixedToCamera = true;
+			buttonright.events.onInputOver.add(this.listenerRight,this,0,true);
+			buttonright.events.onInputOut.add(this.listenerRight,this,0,false);
+			buttonright.events.onInputDown.add(this.listenerRight,this,0,true);
+			buttonright.events.onInputUp.add(this.listenerRight,this,0,false);
 		}
 
 		update () 
@@ -219,7 +288,7 @@ module JuegoCostanera {
 			this.getGame().physics.arcade.collide(this.getFruta().getEmitterFrutas(),this.getPersonaje(),this.collisionFruta,null, this);
 
 			this.getPersonaje().body.velocity.x = 0;
-			if (this.getCursores().left.isDown)
+			if (this.getCursores().left.isDown || this.getLeft())
 			{
 				this.getPersonaje().body.velocity.x = -500;
 				if (this.getPersonaje().getOrientacion() != 'left'){
@@ -227,7 +296,7 @@ module JuegoCostanera {
 						this.getPersonaje().setOrientacion('left');
 				}
 			}
-			else if (this.getCursores().right.isDown){
+			else if (this.getCursores().right.isDown || this.getRight()){
 				this.getPersonaje().body.velocity.x = 500;
 				if (this.getPersonaje().getOrientacion() != 'right'){
 						this.getPersonaje().animations.play('right');
@@ -247,7 +316,7 @@ module JuegoCostanera {
 				}
 			}
 
-			if (this.getSaltarBtn().isDown && this.getPersonaje().body.onFloor()) {
+			if ((this.getSaltarBtn().isDown || this.getJump()) && (this.getPersonaje().body.onFloor())) {
 				this.getPersonaje().body.velocity.y = -400;
 				this.setDobleSalto(1);
 				this.getSaltarBtn().isDown = false;
@@ -272,6 +341,8 @@ module JuegoCostanera {
 				var gameOverText = this.getGame().add.image(this.getGame().world.centerX-130,this.getGame().world.centerY-125,'gameover');			
 			
 			}
+
+			if (this.getGame().input.totalActivePointers == 0 && !this.getGame().input.activePointer.isMouse){ this.setRight(false); this.setLeft(false); this.setJump(false)} 
 		}
 
 		personajeDie(){
@@ -298,11 +369,26 @@ module JuegoCostanera {
 			
 		
 		}
+		
+		goFull() { this.getGame().scale.startFullScreen(false);}
 
 		listener () 
 		{
 			this.getPersonaje().revive()
 		}
+
+		listenerJump(key,arg,arg2){
+			this.setJump(arg2);
+		}
+
+		listenerLeft(key,arg,arg2){
+			this.setLeft(arg2);
+		}
+
+		listenerRight(key,arg,arg2){
+			this.setRight(arg2);
+		}
+
 
 	}
 
